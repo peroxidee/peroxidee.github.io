@@ -72,7 +72,7 @@ Lateral Movement is a technique used to gain access to additional hosts within a
 <body class="pink">
 
 
-<div class="container headings--one-size">
+<div class="container full headings--one-size">
 
   <header class="header">
   <div class="header__inner">
@@ -97,12 +97,47 @@ Lateral Movement is a technique used to gain access to additional hosts within a
   <h1 class="post-title">
     <a href="https://peroxidee.github.io/posts/writeup/">pivoting, tunneling, and port forwarding</a>
   </h1>
-  <div class="post-meta"><time class="post-date">2023-09-25</time></div>
+  <div class="post-meta"><time class="post-date">2023-09-25</time><span class="post-reading-time">16 min read (3381 words)</span></div>
 
+  
+    <span class="post-tags">
+      
+      #<a href="https://peroxidee.github.io/tags/pentesting/">pentesting</a>&nbsp;
+      
+      #<a href="https://peroxidee.github.io/tags/hacking/">hacking</a>&nbsp;
+      
+      #<a href="https://peroxidee.github.io/tags/networking/">networking</a>&nbsp;
+      
+      #<a href="https://peroxidee.github.io/tags/htb-academy/">htb academy</a>&nbsp;
+      
+    </span>
   
   
 
 
+  
+    <div class="table-of-contents">
+      <h2>
+        Table of Contents
+      </h2>
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#notes-on-pivoting-from-htb-academys-pivoting-module">Notes on pivoting from HTB Academy’s pivoting module</a>
+      <ul>
+        <li><a href="#intro">INTRO</a></li>
+      </ul>
+    </li>
+    <li><a href="#dynamic-port-forwarding-with-ssh-and-sockshttpsenwikipediaorgwikisocks-tunneling">Dynamic Port Forwarding With SSH and <a href="https://en.wikipedia.org/wiki/SOCKS">SOCKS</a> Tunneling.</a></li>
+    <li><a href="#remotereverse-port-fowarding-with-ssh">Remote/Reverse Port Fowarding with SSH</a></li>
+    <li><a href="#meterpreter-tunneling-and-port-forwarding">Meterpreter Tunneling and Port Forwarding</a></li>
+    <li><a href="#socat-redirection-with-a-reverse-shell">Socat Redirection with a Reverse Shell</a></li>
+    <li><a href="#socat-redirection-with-a-bind-shell">Socat Redirection with a Bind Shell</a></li>
+    <li><a href="#ssh-for-windows-plinkexe">SSH for Windows: plink.exe</a></li>
+    <li><a href="#web-server-pivoting-with-rpivot">Web Server Pivoting with Rpivot</a></li>
+    <li><a href="#dns-tunneling-with-dnscat2">DNS Tunneling with Dnscat2</a></li>
+  </ul>
+</nav>
+    </div>
   
 
   <div class="post-content"><div>

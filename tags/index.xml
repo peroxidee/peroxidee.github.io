@@ -5,6 +5,47 @@
     <link>https://peroxidee.github.io/tags/</link>
     <description>Recent content in Tags on peroxidee.global</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://peroxidee.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Mon, 25 Sep 2023 15:14:25 -0700</lastBuildDate><atom:link href="https://peroxidee.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>hacking</title>
+      <link>https://peroxidee.github.io/tags/hacking/</link>
+      <pubDate>Mon, 25 Sep 2023 15:14:25 -0700</pubDate>
+      
+      <guid>https://peroxidee.github.io/tags/hacking/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>htb academy</title>
+      <link>https://peroxidee.github.io/tags/htb-academy/</link>
+      <pubDate>Mon, 25 Sep 2023 15:14:25 -0700</pubDate>
+      
+      <guid>https://peroxidee.github.io/tags/htb-academy/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>networking</title>
+      <link>https://peroxidee.github.io/tags/networking/</link>
+      <pubDate>Mon, 25 Sep 2023 15:14:25 -0700</pubDate>
+      
+      <guid>https://peroxidee.github.io/tags/networking/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>pentesting</title>
+      <link>https://peroxidee.github.io/tags/pentesting/</link>
+      <pubDate>Mon, 25 Sep 2023 15:14:25 -0700</pubDate>
+      
+      <guid>https://peroxidee.github.io/tags/pentesting/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
   </channel>
 </rss>
