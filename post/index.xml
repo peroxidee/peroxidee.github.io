@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>peroxidee.global</title>
-    <link>https://peroxidee.github.io/</link>
-    <description>Recent content on peroxidee.global</description>
+    <title>Posts on peroxidee.global</title>
+    <link>https://peroxidee.github.io/post/</link>
+    <description>Recent content in Posts on peroxidee.global</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 25 Sep 2023 15:14:25 -0700</lastBuildDate><atom:link href="https://peroxidee.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 25 Sep 2023 15:14:25 -0700</lastBuildDate><atom:link href="https://peroxidee.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>pivoting, tunneling, and port forwarding</title>
       <link>https://peroxidee.github.io/post/writeup/</link>
@@ -249,17 +249,6 @@ msf6 exploit(multi/handler) &amp;gt; run
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;from /home/wav/academy/pivot/dnsp/dnscat2/server/controller/controller.rb:13:in &amp;lt;top &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;required&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;&amp;gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39; 	from &amp;lt;internal:/usr/lib/ruby/vendor_ruby/rubygems/core_ext/kernel_require.rb&amp;gt;:85:in require&amp;#39;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;from internal:/usr/lib/ruby/vendor_ruby/rubygems/core_ext/kernel_require.rb:85:in require&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39; 	from dnscat2.rb:20:in &amp;lt;main&amp;gt;&amp;#39;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content>
-    </item>
-    
-    <item>
-      <title>hello world!</title>
-      <link>https://peroxidee.github.io/posts/mypost/</link>
-      <pubDate>Mon, 25 Sep 2023 13:57:47 -0500</pubDate>
-      
-      <guid>https://peroxidee.github.io/posts/mypost/</guid>
-      <description>hello world! welcome to peroxidee.global, my blog for updating you on all sorts of my activities.</description>
-      <content>&lt;p&gt;hello world! welcome to peroxidee.global, my blog for updating you on all sorts of my activities.&lt;/p&gt;
-</content>
     </item>
     
   </channel>
