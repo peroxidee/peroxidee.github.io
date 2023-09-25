@@ -8,6 +8,31 @@
     <language>en-us</language>
     <lastBuildDate>Mon, 25 Sep 2023 15:14:25 -0700</lastBuildDate><atom:link href="https://peroxidee.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>About</title>
+      <link>https://peroxidee.github.io/about/</link>
+      <pubDate>Mon, 25 Sep 2023 15:43:06 -0700</pubDate>
+      
+      <guid>https://peroxidee.github.io/about/</guid>
+      <description>welcome to peroxide.global!! this is a centralized site where i wanted to share everything i&amp;rsquo;ve been up to. this might include writeups, notes, and anything else that could be notable. for those that don&amp;rsquo;t know me: i&amp;rsquo;m friday kriedeman, also known as iluvwerewolves and peroxidee. i&amp;rsquo;m a beginner intermediate pentester, a sophomore at csusb studying ist - cybersecurity with a minor in compsci, and i&amp;rsquo;m a passionate ai enthusiast.
+i&amp;rsquo;m always on the lookout for new and exciting cybersecurity challenges to tackle.</description>
+      <content>&lt;h1 id=&#34;welcome-to-peroxideglobal&#34;&gt;welcome to peroxide.global!!&lt;/h1&gt;
+&lt;h2 id=&#34;this-is-a-centralized-site-where-i-wanted-to-share-everything-ive-been-up-to-this-might-include-writeups-notes-and-anything-else-that-could-be-notable&#34;&gt;this is a centralized site where i wanted to share everything i&amp;rsquo;ve been up to. this might include writeups, notes, and anything else that could be notable.&lt;/h2&gt;
+&lt;h3 id=&#34;for-those-that-dont-know-me&#34;&gt;for those that don&amp;rsquo;t know me:&lt;/h3&gt;
+&lt;p&gt;i&amp;rsquo;m friday kriedeman, also known as iluvwerewolves and peroxidee. i&amp;rsquo;m a beginner intermediate pentester, a sophomore at csusb studying ist - cybersecurity with a minor in compsci, and i&amp;rsquo;m a passionate ai enthusiast.&lt;/p&gt;
+&lt;p&gt;i&amp;rsquo;m always on the lookout for new and exciting cybersecurity challenges to tackle. i&amp;rsquo;m a quick learner and i&amp;rsquo;m always eager to expand my knowledge and skills. i&amp;rsquo;m also a team player and i&amp;rsquo;m always willing to lend a helping hand to my fellow cyber warriors.&lt;/p&gt;
+&lt;p&gt;i&amp;rsquo;m looking for an opportunity to use my skills and knowledge to make a positive impact on the world. i&amp;rsquo;m confident that i can be a valuable asset to any team, and i&amp;rsquo;m excited to see what the future holds.&lt;/p&gt;
+&lt;p&gt;in the meantime, you can find me writing blog posts about cybersecurity, ai, and other nerdy topics. i also enjoy making and listeing to music, reading books, and playing dunegons and dragons.&lt;/p&gt;
+&lt;p&gt;so what are you waiting for? set sail on this adventure with me and let&amp;rsquo;s explore the world of cybersecurity together!&lt;/p&gt;
+&lt;p&gt;I hope this is more to your liking.&lt;/p&gt;
+&lt;h2 id=&#34;im-avaliable-for-contact-at-any-of-these-avenues&#34;&gt;i&amp;rsquo;m avaliable for contact at any of these avenues:&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;discord - iluvwerewolves&lt;/code&gt;
+&lt;code&gt;linkedin - friday kriedeman&lt;/code&gt;
+&lt;code&gt;github - peroxidee&lt;/code&gt;
+&lt;code&gt;hackthebox - iluvwerewolves&lt;/code&gt;&lt;/p&gt;
+</content>
+    </item>
+    
+    <item>
       <title>pivoting, tunneling, and port forwarding</title>
       <link>https://peroxidee.github.io/posts/writeup/</link>
       <pubDate>Mon, 25 Sep 2023 15:14:25 -0700</pubDate>
