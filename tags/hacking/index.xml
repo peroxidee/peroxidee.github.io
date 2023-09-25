@@ -6,7 +6,184 @@
     <description>Recent content in hacking on Terminal</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 25 Sep 2023 15:14:25 -0700</lastBuildDate><atom:link href="https://peroxidee.github.io/tags/hacking/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 25 Sep 2023 16:14:28 -0700</lastBuildDate><atom:link href="https://peroxidee.github.io/tags/hacking/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>command injections</title>
+      <link>https://peroxidee.github.io/posts/cmdinject/</link>
+      <pubDate>Mon, 25 Sep 2023 16:14:28 -0700</pubDate>
+      
+      <guid>https://peroxidee.github.io/posts/cmdinject/</guid>
+      <description>command injections Intro to Command Injections A command injection vulnerability is among the most critical types of vulnerabilities. This means that we use system commands on a back-end server, which can be a fatal vulnerability to the integrity of a server. If a web application uses user-controlled input to use sytem commands on servers to get and post specific output, we can place a payload in this part.
+What is an Injection?</description>
+      <content>&lt;h1 id=&#34;command-injections&#34;&gt;command injections&lt;/h1&gt;
+&lt;h1 id=&#34;intro-to-command-injections&#34;&gt;Intro to Command Injections&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;A command injection vulnerability is among the most critical types of vulnerabilities. This means that we use system commands on a back-end server, which can be a fatal vulnerability to the integrity of a server. If a web application uses user-controlled input to use sytem commands on servers to get and post specific output, we can place a payload in this part.&lt;/p&gt;
+&lt;h3 id=&#34;what-is-an-injection&#34;&gt;What is an Injection?&lt;/h3&gt;
+&lt;p&gt;Injections are in the top 3 risks in OWASP’s Top 10 Web App Risks because of how high their impact and how they tend to be common. This occurs when user-controlled input is then misinterpreted as a part of the web query or code being executed. This can lead to subversion in the intended outcome of the query to a different outcome.&lt;/p&gt;
+&lt;p&gt;There are a lot of different types of injections, all different on the type of web query being executed.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;OS Command Injection&lt;/th&gt;
+&lt;th&gt;Occurs when a user input is directly used as part of an OS command.&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Code Injection&lt;/td&gt;
+&lt;td&gt;Occurs when user input is directly within a function that evaluates code.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SQL Injections&lt;/td&gt;
+&lt;td&gt;Occurs when user input is directly used as part of an SQL query&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;XSS/HTML Injection&lt;/td&gt;
+&lt;td&gt;Occurs when exact user input is display on a web page&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;There are a lot of other types, LDAP Injection, NoSQL Injection, HTTP Header Injection, etc… Whenever user input is eued iwhtin a query without being properly sanitized, it may be possible to escape the boundaries of the user input string to the parent query and maniuple it to change it’s intended purpose. This is why as more web technologies are introduced to more web apps, we can see new types of injections introduced.&lt;/p&gt;
+&lt;h3 id=&#34;os-command-injections&#34;&gt;OS Command Injections&lt;/h3&gt;
+&lt;p&gt;When it comes to OS Command injections, the user input we abused must directly or indirectly go into or affect a web query that executes system commands. All web programming languages have different fucntions that enable the developer to execute operating system commands directly on the back-end server whenever they need to. This may be used for various purposes, like installing plugins or executing certain application.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;PHP Example&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;isset&lt;/span&gt;($_GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;filename&amp;#39;&lt;/span&gt;])) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#a6e22e&#34;&gt;system&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;touch /tmp/&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; $_GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;filename&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;.pdf.&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;?&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;NodeJS Example&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-jsx&#34; data-lang=&#34;jsx&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;app&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/createfile&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#a6e22e&#34;&gt;child_process&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;exec&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;`touch /tmp/&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;query&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;filename&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;.txt`&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;})
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;detection&#34;&gt;Detection&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;The process of detecting basic OS Command Injection vulnerabilites is the same process as exploiting these vulns. We will append our command through various injection methods. If the command output changes from the intended usual result, we have succcessfully exploited the vulnerability, this might not be true for more advanced command injection vulnerabilites because we may utillize various fuzzing methods or code reviews to identify potential command injection vulnerabilites. We may then gradually build our payload until we achiieve command injection. This module will focus on basic command injection, where we control user input that is being directly used ina ssetm command execution a function without any santifizaiton.&lt;/p&gt;
+&lt;h3 id=&#34;command-injection-detection&#34;&gt;Command Injection Detection&lt;/h3&gt;
+&lt;p&gt;When we visit the web app, we check our host Checker util that appears to ask us for an IP to see if it’s alive or not. We can use something to remove and stop the code before it runs.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Injection Operator&lt;/th&gt;
+&lt;th&gt;Injection Character&lt;/th&gt;
+&lt;th&gt;URL-Encoded Character&lt;/th&gt;
+&lt;th&gt;Executed Command&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Semicolon&lt;/td&gt;
+&lt;td&gt;;&lt;/td&gt;
+&lt;td&gt;%3b&lt;/td&gt;
+&lt;td&gt;Both&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;New Line&lt;/td&gt;
+&lt;td&gt;\n&lt;/td&gt;
+&lt;td&gt;%0a&lt;/td&gt;
+&lt;td&gt;Both&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Background&lt;/td&gt;
+&lt;td&gt;&amp;amp;&lt;/td&gt;
+&lt;td&gt;%26&lt;/td&gt;
+&lt;td&gt;Both (second output generally shown first)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Pipe&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;%7c&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;AND&lt;/td&gt;
+&lt;td&gt;&amp;amp;&amp;amp;&lt;/td&gt;
+&lt;td&gt;%26%26&lt;/td&gt;
+&lt;td&gt;Both (only if first succeeds)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;OR&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Sub-Shell&lt;/td&gt;
+&lt;td&gt;``&lt;/td&gt;
+&lt;td&gt;%60%60&lt;/td&gt;
+&lt;td&gt;Both (Linux-only)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Sub-Shell&lt;/td&gt;
+&lt;td&gt;$()&lt;/td&gt;
+&lt;td&gt;%24%28%29&lt;/td&gt;
+&lt;td&gt;Both (Linux-only)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Because our code is sanitized, we will notice that we can’t actually send the code in.&lt;/p&gt;
+&lt;h1 id=&#34;injecting-commands&#34;&gt;Injecting Commands&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;We can add a semi=colon after our input, and then add another command, &lt;code&gt;whoami&lt;/code&gt; to this as well.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ping -c 1 127.0.0.1; whoami&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The web app will get mad at us and tell us that it cannot be sent and needs to match the requested format.&lt;/p&gt;
+&lt;p&gt;Let’s whip out burpsuite.&lt;/p&gt;
+&lt;p&gt;We are going to intercept the requests as a proxy and use it to see how the web app will handle it. We are going to repeat what we did before on the web app with burpsuite.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;POST / HTTP/1.1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host: 94.237.49.11:35165
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/114.0
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Accept-Language: en-US,en;q=0.5
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Accept-Encoding: gzip, deflate
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Content-Type: application/x-www-form-urlencoded
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Content-Length: 19
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Origin: [http://94.237.49.11:35165](http://94.237.49.11:35165/)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Connection: close
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Referer: [http://94.237.49.11:35165/](http://94.237.49.11:35165/)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Upgrade-Insecure-Requests: 1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ip=127.0.0.1;whoami
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;other-injection-operators&#34;&gt;Other Injection Operators&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;and-operator&#34;&gt;AND Operator&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;ping -c 1 127.0.0.1 &amp;amp;&amp;amp; whoami&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;or-operator&#34;&gt;OR Operator&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;ping -c 1 || whoami&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;identifying-filters&#34;&gt;Identifying Filters&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;As we’ve seen in the previous section, sometimes developers will try to secure the web application, against the injections, it can be exploitable if the application is not securely written. Another type of this injection is utilizing blacklisted characters and words on the back-end to detect injections attempts and stop them from going through. WAFs can also be used to block this through a numerous means.&lt;/p&gt;
+&lt;p&gt;We will use this section to look at how command injections are blocked and detected.&lt;/p&gt;
+&lt;h1 id=&#34;bypassing-space-filters&#34;&gt;Bypassing Space Filters&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;There are numerous ways to detect injection attempts, and there are other ways to go through and avoid these detections. We will be using this with linux and learn how to bypass them through that.&lt;/p&gt;
+&lt;p&gt;Bypassing Blackisted Operators&lt;/p&gt;
+&lt;p&gt;There are a alot of operators that can be blacklistsed. The one that isn’t is currently new-line.&lt;/p&gt;
+&lt;p&gt;Some techniques we can use are:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;{ls,-la}&lt;/th&gt;
+&lt;th&gt;Brace Expansion&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;${IFS}&lt;/td&gt;
+&lt;td&gt;Linux Environmental Variables&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;%09&lt;/td&gt;
+&lt;td&gt;Tab&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;%0a&lt;/td&gt;
+&lt;td&gt;Space&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+</content>
+    </item>
+    
     <item>
       <title>pivoting, tunneling, and port forwarding</title>
       <link>https://peroxidee.github.io/posts/writeup/</link>

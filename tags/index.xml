@@ -6,13 +6,33 @@
     <description>Recent content in Tags on Terminal</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 25 Sep 2023 15:14:25 -0700</lastBuildDate><atom:link href="https://peroxidee.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 25 Sep 2023 16:14:28 -0700</lastBuildDate><atom:link href="https://peroxidee.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>hacking</title>
       <link>https://peroxidee.github.io/tags/hacking/</link>
-      <pubDate>Mon, 25 Sep 2023 15:14:25 -0700</pubDate>
+      <pubDate>Mon, 25 Sep 2023 16:14:28 -0700</pubDate>
       
       <guid>https://peroxidee.github.io/tags/hacking/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>pentesting</title>
+      <link>https://peroxidee.github.io/tags/pentesting/</link>
+      <pubDate>Mon, 25 Sep 2023 16:14:28 -0700</pubDate>
+      
+      <guid>https://peroxidee.github.io/tags/pentesting/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>web app exploits</title>
+      <link>https://peroxidee.github.io/tags/web-app-exploits/</link>
+      <pubDate>Mon, 25 Sep 2023 16:14:28 -0700</pubDate>
+      
+      <guid>https://peroxidee.github.io/tags/web-app-exploits/</guid>
       <description></description>
       <content></content>
     </item>
@@ -33,16 +53,6 @@
       <pubDate>Mon, 25 Sep 2023 15:14:25 -0700</pubDate>
       
       <guid>https://peroxidee.github.io/tags/networking/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
-    <item>
-      <title>pentesting</title>
-      <link>https://peroxidee.github.io/tags/pentesting/</link>
-      <pubDate>Mon, 25 Sep 2023 15:14:25 -0700</pubDate>
-      
-      <guid>https://peroxidee.github.io/tags/pentesting/</guid>
       <description></description>
       <content></content>
     </item>

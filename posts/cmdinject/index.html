@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>command injections :: Terminal</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="command injections Intro to Command Injections A command injection vulnerability is among the most critical types of vulnerabilities. This means that we use system commands on a back-end server, which can be a fatal vulnerability to the integrity of a server. If a web application uses user-controlled input to use sytem commands on servers to get and post specific output, we can place a payload in this part.
+What is an Injection?" />
+<meta name="keywords" content="hacking, command inject" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="https://peroxidee.github.io/posts/cmdinject/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://peroxidee.github.io/styles.css">
+
+
+
+
+
+
+
+  <link rel="shortcut icon" href="https://peroxidee.github.io/img/theme-colors/blue.png">
+  <link rel="apple-touch-icon" href="https://peroxidee.github.io/img/theme-colors/blue.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="command injections">
+<meta property="og:description" content="command injections Intro to Command Injections A command injection vulnerability is among the most critical types of vulnerabilities. This means that we use system commands on a back-end server, which can be a fatal vulnerability to the integrity of a server. If a web application uses user-controlled input to use sytem commands on servers to get and post specific output, we can place a payload in this part.
+What is an Injection?" />
+<meta property="og:url" content="https://peroxidee.github.io/posts/cmdinject/" />
+<meta property="og:site_name" content="Terminal" />
+
+  
+  
+  <meta property="og:image" content="https://peroxidee.github.io/">
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-09-25 16:14:28 -0700 PDT" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="blue">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    Terminal
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/showcase">Showcase</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/about" >About</a></li>
+        
+      
+        
+          <li><a href="/showcase" >Showcase</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://peroxidee.github.io/posts/cmdinject/">command injections</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-09-25</time><span class="post-author">friday</span><span class="post-reading-time">5 min read (890 words)</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="https://peroxidee.github.io/tags/hacking/">hacking</a>&nbsp;
+      
+      #<a href="https://peroxidee.github.io/tags/pentesting/">pentesting</a>&nbsp;
+      
+      #<a href="https://peroxidee.github.io/tags/web-app-exploits/">web app exploits</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+    <div class="table-of-contents">
+      <h2>
+        Table of Contents
+      </h2>
+      <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#what-is-an-injection">What is an Injection?</a></li>
+        <li><a href="#os-command-injections">OS Command Injections</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#command-injection-detection">Command Injection Detection</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#and-operator">AND Operator</a></li>
+        <li><a href="#or-operator">OR Operator</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+  
+
+  <div class="post-content"><div>
+        <h1 id="command-injections">command injections<a href="#command-injections" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<h1 id="intro-to-command-injections">Intro to Command Injections<a href="#intro-to-command-injections" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<hr>
+<p>A command injection vulnerability is among the most critical types of vulnerabilities. This means that we use system commands on a back-end server, which can be a fatal vulnerability to the integrity of a server. If a web application uses user-controlled input to use sytem commands on servers to get and post specific output, we can place a payload in this part.</p>
+<h3 id="what-is-an-injection">What is an Injection?<a href="#what-is-an-injection" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>Injections are in the top 3 risks in OWASP’s Top 10 Web App Risks because of how high their impact and how they tend to be common. This occurs when user-controlled input is then misinterpreted as a part of the web query or code being executed. This can lead to subversion in the intended outcome of the query to a different outcome.</p>
+<p>There are a lot of different types of injections, all different on the type of web query being executed.</p>
+<table>
+<thead>
+<tr>
+<th>OS Command Injection</th>
+<th>Occurs when a user input is directly used as part of an OS command.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Code Injection</td>
+<td>Occurs when user input is directly within a function that evaluates code.</td>
+</tr>
+<tr>
+<td>SQL Injections</td>
+<td>Occurs when user input is directly used as part of an SQL query</td>
+</tr>
+<tr>
+<td>XSS/HTML Injection</td>
+<td>Occurs when exact user input is display on a web page</td>
+</tr>
+</tbody>
+</table>
+<p>There are a lot of other types, LDAP Injection, NoSQL Injection, HTTP Header Injection, etc… Whenever user input is eued iwhtin a query without being properly sanitized, it may be possible to escape the boundaries of the user input string to the parent query and maniuple it to change it’s intended purpose. This is why as more web technologies are introduced to more web apps, we can see new types of injections introduced.</p>
+<h3 id="os-command-injections">OS Command Injections<a href="#os-command-injections" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>When it comes to OS Command injections, the user input we abused must directly or indirectly go into or affect a web query that executes system commands. All web programming languages have different fucntions that enable the developer to execute operating system commands directly on the back-end server whenever they need to. This may be used for various purposes, like installing plugins or executing certain application.</p>
+<p><strong>PHP Example</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isset</span>($_GET[<span style="color:#e6db74">&#39;filename&#39;</span>])) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">system</span>(<span style="color:#e6db74">&#34;touch /tmp/&#34;</span> <span style="color:#f92672">.</span> $_GET[<span style="color:#e6db74">&#39;filename&#39;</span>] <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34;.pdf.&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">?&gt;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p><strong>NodeJS Example</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-jsx" data-lang="jsx"><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/createfile&#34;</span>, <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>){
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">child_process</span>.<span style="color:#a6e22e">exec</span>(<span style="color:#e6db74">`touch /tmp/</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">query</span>.<span style="color:#a6e22e">filename</span><span style="color:#e6db74">}</span><span style="color:#e6db74">.txt`</span>);
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre></div><h1 id="detection">Detection<a href="#detection" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<hr>
+<p>The process of detecting basic OS Command Injection vulnerabilites is the same process as exploiting these vulns. We will append our command through various injection methods. If the command output changes from the intended usual result, we have succcessfully exploited the vulnerability, this might not be true for more advanced command injection vulnerabilites because we may utillize various fuzzing methods or code reviews to identify potential command injection vulnerabilites. We may then gradually build our payload until we achiieve command injection. This module will focus on basic command injection, where we control user input that is being directly used ina ssetm command execution a function without any santifizaiton.</p>
+<h3 id="command-injection-detection">Command Injection Detection<a href="#command-injection-detection" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>When we visit the web app, we check our host Checker util that appears to ask us for an IP to see if it’s alive or not. We can use something to remove and stop the code before it runs.</p>
+<table>
+<thead>
+<tr>
+<th>Injection Operator</th>
+<th>Injection Character</th>
+<th>URL-Encoded Character</th>
+<th>Executed Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Semicolon</td>
+<td>;</td>
+<td>%3b</td>
+<td>Both</td>
+</tr>
+<tr>
+<td>New Line</td>
+<td>\n</td>
+<td>%0a</td>
+<td>Both</td>
+</tr>
+<tr>
+<td>Background</td>
+<td>&amp;</td>
+<td>%26</td>
+<td>Both (second output generally shown first)</td>
+</tr>
+<tr>
+<td>Pipe</td>
+<td></td>
+<td></td>
+<td>%7c</td>
+</tr>
+<tr>
+<td>AND</td>
+<td>&amp;&amp;</td>
+<td>%26%26</td>
+<td>Both (only if first succeeds)</td>
+</tr>
+<tr>
+<td>OR</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Sub-Shell</td>
+<td>``</td>
+<td>%60%60</td>
+<td>Both (Linux-only)</td>
+</tr>
+<tr>
+<td>Sub-Shell</td>
+<td>$()</td>
+<td>%24%28%29</td>
+<td>Both (Linux-only)</td>
+</tr>
+</tbody>
+</table>
+<p>Because our code is sanitized, we will notice that we can’t actually send the code in.</p>
+<h1 id="injecting-commands">Injecting Commands<a href="#injecting-commands" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<hr>
+<p>We can add a semi=colon after our input, and then add another command, <code>whoami</code> to this as well.</p>
+<p><code>ping -c 1 127.0.0.1; whoami</code></p>
+<p>The web app will get mad at us and tell us that it cannot be sent and needs to match the requested format.</p>
+<p>Let’s whip out burpsuite.</p>
+<p>We are going to intercept the requests as a proxy and use it to see how the web app will handle it. We are going to repeat what we did before on the web app with burpsuite.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>POST / HTTP/1.1
+</span></span><span style="display:flex;"><span>Host: 94.237.49.11:35165
+</span></span><span style="display:flex;"><span>User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/114.0
+</span></span><span style="display:flex;"><span>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+</span></span><span style="display:flex;"><span>Accept-Language: en-US,en;q=0.5
+</span></span><span style="display:flex;"><span>Accept-Encoding: gzip, deflate
+</span></span><span style="display:flex;"><span>Content-Type: application/x-www-form-urlencoded
+</span></span><span style="display:flex;"><span>Content-Length: 19
+</span></span><span style="display:flex;"><span>Origin: [http://94.237.49.11:35165](http://94.237.49.11:35165/)
+</span></span><span style="display:flex;"><span>Connection: close
+</span></span><span style="display:flex;"><span>Referer: [http://94.237.49.11:35165/](http://94.237.49.11:35165/)
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests: 1
+</span></span><span style="display:flex;"><span>ip=127.0.0.1;whoami
+</span></span></code></pre></div><h1 id="other-injection-operators">Other Injection Operators<a href="#other-injection-operators" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<hr>
+<h3 id="and-operator">AND Operator<a href="#and-operator" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p><code>ping -c 1 127.0.0.1 &amp;&amp; whoami</code></p>
+<h3 id="or-operator">OR Operator<a href="#or-operator" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p><code>ping -c 1 || whoami</code></p>
+<h1 id="identifying-filters">Identifying Filters<a href="#identifying-filters" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<hr>
+<p>As we’ve seen in the previous section, sometimes developers will try to secure the web application, against the injections, it can be exploitable if the application is not securely written. Another type of this injection is utilizing blacklisted characters and words on the back-end to detect injections attempts and stop them from going through. WAFs can also be used to block this through a numerous means.</p>
+<p>We will use this section to look at how command injections are blocked and detected.</p>
+<h1 id="bypassing-space-filters">Bypassing Space Filters<a href="#bypassing-space-filters" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<hr>
+<p>There are numerous ways to detect injection attempts, and there are other ways to go through and avoid these detections. We will be using this with linux and learn how to bypass them through that.</p>
+<p>Bypassing Blackisted Operators</p>
+<p>There are a alot of operators that can be blacklistsed. The one that isn’t is currently new-line.</p>
+<p>Some techniques we can use are:</p>
+<table>
+<thead>
+<tr>
+<th>{ls,-la}</th>
+<th>Brace Expansion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>${IFS}</td>
+<td>Linux Environmental Variables</td>
+</tr>
+<tr>
+<td>%09</td>
+<td>Tab</td>
+</tr>
+<tr>
+<td>%0a</td>
+<td>Space</td>
+</tr>
+</tbody>
+</table>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="https://peroxidee.github.io/posts/writeup/">
+                <span class="button__text">pivoting, tunneling, and port forwarding</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">Hugo</a></span>
+    
+      <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>
