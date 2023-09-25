@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on peroxidee.global</title>
+    <link>https://peroxidee.github.io/posts/</link>
+    <description>Recent content in Posts on peroxidee.global</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 25 Sep 2023 13:57:47 -0500</lastBuildDate><atom:link href="https://peroxidee.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>hello world!</title>
+      <link>https://peroxidee.github.io/posts/mypost/</link>
+      <pubDate>Mon, 25 Sep 2023 13:57:47 -0500</pubDate>
+      
+      <guid>https://peroxidee.github.io/posts/mypost/</guid>
+      <description>hello world! welcome to peroxidee.global, my blog for updating you on all sorts of my activities.</description>
+      <content>&lt;p&gt;hello world! welcome to peroxidee.global, my blog for updating you on all sorts of my activities.&lt;/p&gt;
+</content>
+    </item>
+    
+  </channel>
+</rss>
